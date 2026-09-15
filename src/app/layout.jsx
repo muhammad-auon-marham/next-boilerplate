@@ -25,13 +25,22 @@ export const viewport = {
   themeColor: primaryColor.main,
 };
 
+/**
+ * Marham icons. The `.ico` carries 16–256px frames so each browser picks a sharp size; the Apple
+ * touch icon is opaque navy because iOS composites transparency against black.
+ */
 export const metadata = {
-  icons: [
-    {
-      rel: 'icon',
-      url: `${CONFIG.assetsDir}/favicon.ico`,
-    },
-  ],
+  icons: {
+    icon: [
+      { url: `${CONFIG.assetsDir}/favicon.ico`, sizes: 'any' },
+      { url: `${CONFIG.assetsDir}/favicon-32x32.png`, type: 'image/png', sizes: '32x32' },
+      { url: `${CONFIG.assetsDir}/favicon-16x16.png`, type: 'image/png', sizes: '16x16' },
+      { url: `${CONFIG.assetsDir}/favicon-192x192.png`, type: 'image/png', sizes: '192x192' },
+      { url: `${CONFIG.assetsDir}/favicon-512x512.png`, type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [{ url: `${CONFIG.assetsDir}/apple-touch-icon.png`, sizes: '180x180' }],
+  },
+  manifest: `${CONFIG.assetsDir}/site.webmanifest`,
 };
 
 // ----------------------------------------------------------------------

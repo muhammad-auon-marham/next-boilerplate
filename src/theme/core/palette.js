@@ -24,13 +24,19 @@ export const grey = createPaletteChannel(themeConfig.palette.grey);
  * ➤ ➤ Text, background, action
  * ➤
  */
+/**
+ * Marham: light text equals the mobile app's `text` / `textSecondary`; `disabled` stays on gray500
+ * (5.0:1) because the app's `textMuted` fails WCAG AA. Dark-mode secondary/disabled move up the ramp
+ * so they stay readable on the darker greys.
+ */
 export const text = {
   light: createPaletteChannel({ primary: grey[800], secondary: grey[600], disabled: grey[500] }),
-  dark: createPaletteChannel({ primary: '#FFFFFF', secondary: grey[500], disabled: grey[600] }),
+  dark: createPaletteChannel({ primary: '#FFFFFF', secondary: grey[300], disabled: grey[400] }),
 };
 
 export const background = {
-  light: createPaletteChannel({ paper: '#FFFFFF', default: '#FFFFFF', neutral: grey[200] }),
+  // `neutral` is grey[100] (#F3F4F6) — the app's page background
+  light: createPaletteChannel({ paper: '#FFFFFF', default: '#FFFFFF', neutral: grey[100] }),
   dark: createPaletteChannel({ paper: grey[800], default: grey[900], neutral: '#28323D' }),
 };
 
