@@ -1,0 +1,13 @@
+{
+  "port": 3032,
+  "install": "npm install --include=dev",
+  "dev": "npm run dev -- -H 0.0.0.0",
+  "build": "npm run build",
+  "start": "npm run start -- -H 0.0.0.0",
+  "healthPath": "/",
+  "check": "npm run lint",
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "agentNotes": "Next.js 16 App Router + MUI 9 (Minimal UI kit), JavaScript only (.js/.jsx, no TypeScript). Keep route files thin: src/app/<route>/page.jsx exports `metadata` (title uses CONFIG.appName) and renders a view from src/sections/<feature>/view/; put the UI in src/sections/<feature>/ and mark interactive components with 'use client'. Register every path in src/routes/paths.js and link to it via `paths` (never hardcode URLs); add sidebar items in src/layouts/nav-config-dashboard.jsx. Pages under /dashboard are wrapped by DashboardLayout + AuthGuard (src/app/dashboard/layout.jsx). Reuse src/components first (Iconify, Label, CustomBreadcrumbs, Scrollbar, EmptyContent, Upload, Chart, table utilities) and src/components/hook-form (Form + Field.*, zod schemas) for forms; style with MUI `sx` and theme tokens; do not add UI or CSS libraries. Call the backend only through the axios instance in src/lib/axios.js with relative URLs under /api/v1/... (add them to `endpoints`); responses are already unwrapped to the `data` payload and the JWT is attached after sign-in. Never hardcode a backend host; the browser only sees NEXT_PUBLIC_* and LAUNCHPAD_* variables. Import with the `src/` alias. Keep `npm run lint` passing (import order is enforced; `npm run lint:fix` sorts it)."
+}

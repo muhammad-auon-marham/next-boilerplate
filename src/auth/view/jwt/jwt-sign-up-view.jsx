@@ -32,10 +32,15 @@ export const SignUpSchema = z.object({
   firstName: z.string().min(1, { error: 'First name is required!' }),
   lastName: z.string().min(1, { error: 'Last name is required!' }),
   email: schemaUtils.email(),
+  // Mirrors PASSWORD_RULE in the NestJS backend (src/modules/users/dto/create-user.dto.ts)
   password: z
     .string()
     .min(1, { error: 'Password is required!' })
-    .min(6, { error: 'Password must be at least 6 characters!' }),
+    .min(8, { error: 'Password must be at least 8 characters!' })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/, {
+      error:
+        'Use an uppercase letter, a lowercase letter, a number and a special character (@$!%*?&#)',
+    }),
 });
 
 // ----------------------------------------------------------------------
@@ -106,7 +111,7 @@ export function JwtSignUpView() {
       <Field.Text
         name="password"
         label="Password"
-        placeholder="6+ characters"
+        placeholder="8+ characters"
         type={showPassword.value ? 'text' : 'password'}
         slotProps={{
           inputLabel: { shrink: true },

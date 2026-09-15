@@ -67,17 +67,29 @@ src/
 
 ## Auth
 
-`CONFIG.auth.method` is `jwt`. The provider in `src/auth/context/jwt` calls:
+`CONFIG.auth.method` is `jwt`. The provider in `src/auth/context/jwt` talks to the NestJS boilerplate:
 
-- `POST /api/auth/sign-in` → `{ accessToken }`
-- `POST /api/auth/sign-up` → `{ accessToken }`
-- `GET  /api/auth/me` → `{ user }`
+- `POST /api/v1/auth/login` `{ email, password }` → `{ accessToken, refreshToken, user }`
+- `POST /api/v1/auth/register` `{ name, email, password }` → `{ accessToken, refreshToken, user }`
+- `GET  /api/v1/auth/me` → the user
 
-on `NEXT_PUBLIC_SERVER_URL`. Update `src/lib/axios.js` endpoints to match your backend.
+The backend wraps responses as `{ success, message, data }`; `src/lib/axios.js` unwraps them, so `res.data` is the payload.
+Requests are relative (`/api/...`) unless `NEXT_PUBLIC_SERVER_URL` is set.
 
 Set `CONFIG.auth.skip = true` in `src/global-config.js` to open the dashboard without signing in while building UI.
 
 The layout header still uses a placeholder user (`src/auth/hooks/use-mocked-user.js`). Swap `useMockedUser()` for `useAuthContext()` once your API returns a real user.
+
+## Launchpad
+
+`launchpad.json` describes how Launchpad runs this template: `next dev` / `next start` on port 3032 bound to
+`0.0.0.0`, health check on `/`, `npm run lint` as the check. Launchpad routes `/api` to the backend and everything
+else here, so leave `NEXT_PUBLIC_SERVER_URL` empty. `next.config.mjs` adds the `LAUNCHPAD_PUBLIC_URL` host to
+`allowedDevOrigins` so HMR works on the public dev URL. Only `NEXT_PUBLIC_*` and `LAUNCHPAD_*` variables reach
+the browser.
+
+For local development without Launchpad, set `NEXT_PUBLIC_SERVER_URL=http://localhost:3000` (the backend allows
+cross-origin requests by default).
 
 ## Docs
 

@@ -4,6 +4,12 @@ import { CONFIG } from 'src/global-config';
 
 // ----------------------------------------------------------------------
 
+/**
+ * `CONFIG.serverUrl` is empty by default, so requests go to relative `/api/...` URLs on the same origin
+ * (Launchpad routes `/api` to the backend). Set it only when the API lives on another origin.
+ *
+ * The access token is attached by `setSession()` in `src/auth/context/jwt/utils.js` after sign-in.
+ */
 const axiosInstance = axios.create({
   baseURL: CONFIG.serverUrl,
   headers: {
@@ -11,23 +17,19 @@ const axiosInstance = axios.create({
   },
 });
 
-/**
- * Optional: Add token (if using auth)
- *
- axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-*
-*/
-
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // The backend wraps every response as `{ success, message, data }`: hand callers the `data` payload
+    const body = response.data;
+    if (body && typeof body === 'object' && 'success' in body && 'data' in body) {
+      response.data = body.data;
+    }
+    return response;
+  },
   (error) => {
-    const message = error?.response?.data?.message || error?.message || 'Something went wrong!';
+    const rawMessage = error?.response?.data?.message || error?.message || 'Something went wrong!';
+    // Validation errors arrive as an array of messages
+    const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage;
     console.error('Axios error:', message);
     return Promise.reject(new Error(message));
   }
@@ -54,8 +56,8 @@ export const fetcher = async (args) => {
 
 export const endpoints = {
   auth: {
-    me: '/api/auth/me',
-    signIn: '/api/auth/sign-in',
-    signUp: '/api/auth/sign-up',
+    me: '/api/v1/auth/me',
+    signIn: '/api/v1/auth/login',
+    signUp: '/api/v1/auth/register',
   },
 };

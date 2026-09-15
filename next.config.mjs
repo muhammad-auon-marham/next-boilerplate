@@ -11,10 +11,23 @@
  */
 const isStaticExport = false;
 
+/**
+ * `next dev` blocks HMR and `/_next/*` requests from origins other than localhost. Behind Launchpad the app
+ * is opened on its public URL, so allow that host (LAUNCHPAD_PUBLIC_URL is set in every environment).
+ */
+function getAllowedDevOrigins() {
+  try {
+    return process.env.LAUNCHPAD_PUBLIC_URL ? [new URL(process.env.LAUNCHPAD_PUBLIC_URL).hostname] : [];
+  } catch {
+    return [];
+  }
+}
+
 // ----------------------------------------------------------------------
 
 const nextConfig = {
   trailingSlash: true,
+  allowedDevOrigins: getAllowedDevOrigins(),
   output: isStaticExport ? 'export' : undefined,
   env: {
     BUILD_STATIC_EXPORT: JSON.stringify(isStaticExport),

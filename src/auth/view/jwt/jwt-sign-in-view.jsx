@@ -32,7 +32,7 @@ export const SignInSchema = z.object({
   password: z
     .string()
     .min(1, { error: 'Password is required!' })
-    .min(6, { error: 'Password must be at least 6 characters!' }),
+    .min(8, { error: 'Password must be at least 8 characters!' }),
 });
 
 // ----------------------------------------------------------------------
@@ -92,7 +92,7 @@ export function JwtSignInView() {
         <Field.Text
           name="password"
           label="Password"
-          placeholder="6+ characters"
+          placeholder="8+ characters"
           type={showPassword.value ? 'text' : 'password'}
           slotProps={{
             inputLabel: { shrink: true },

@@ -29,7 +29,8 @@ export function AuthProvider({ children }) {
 
         const res = await axios.get(endpoints.auth.me);
 
-        const { user } = res.data;
+        // GET /api/v1/auth/me returns the user itself as the payload
+        const user = res.data;
 
         setState({ user: { ...user, accessToken }, loading: false });
       } else {

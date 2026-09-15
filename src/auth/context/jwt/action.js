@@ -34,10 +34,9 @@ export const signInWithPassword = async ({ email, password }) => {
  *************************************** */
 export const signUp = async ({ email, password, firstName, lastName }) => {
   const params = {
+    name: [firstName, lastName].filter(Boolean).join(' '),
     email,
     password,
-    firstName,
-    lastName,
   };
 
   try {
